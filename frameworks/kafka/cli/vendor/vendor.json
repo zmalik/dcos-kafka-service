@@ -3,6 +3,10 @@
 	"ignore": "test",
 	"package": [
 		{
+			"path": "--help",
+			"revision": ""
+		},
+		{
 			"path": "-tree",
 			"revision": ""
 		},
@@ -104,10 +108,13 @@
 			"tree": true
 		},
 		{
-			"checksumSHA1": "kbCt1P08/QIAaOSjF/DTvflwsHQ=",
+			"checksumSHA1": "jeLuFn4I5zW9UUAktD7NakCgszg=",
 			"path": "github.com/mesosphere/dcos-commons/cli",
 			"revision": "8517c80183607461ea791ca801fdc873f2c5455c",
-			"revisionTime": "2018-11-16T23:33:24Z"
+			"revisionTime": "2018-11-16T23:33:24Z",
+			"tree": true,
+			"version": "0.54.3",
+			"versionExact": "0.54.3"
 		},
 		{
 			"checksumSHA1": "uEc9/1HbYGeK7wPStF6FmUlfzGE=",

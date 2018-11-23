@@ -7,3 +7,10 @@ This is a workaround for the Go tooling being confused by e.g. `github.com/mesos
 Frameworks in `dcos-commons/frameworks/` should create a `vendor` symlink which points to here. In other words, a symlink at `frameworks/yoursvc/cli/dcos-yoursvc/vendor` should point to `govendor/`.
 
 This workaround only applies to frameworks which are colocated in the `dcos-commons` repository. External projects shouldn't have to do this, and can instead have a regular `vendor` directory structure with a copy of `github.com/mesosphere/dcos-commons/cli`.
+
+
+# Updating
+To update the CLI to a specific version (0.54.3 in this case) use:
+```
+govendor fetch -v -tree github.com/mesosphere/dcos-commons/cli@0.54.3
+```
