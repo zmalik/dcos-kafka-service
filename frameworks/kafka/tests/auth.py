@@ -133,7 +133,7 @@ def write_to_topic(
     message: str,
     client_properties: list = [],
     environment: str = None,
-    broker_list: str = "\$KAFKA_BROKER_LIST",
+    broker_list: str = r"\$KAFKA_BROKER_LIST",
 ) -> bool:
 
     client_properties_file = write_client_properties(cn, marathon_task, client_properties)
@@ -204,7 +204,7 @@ def read_from_topic(
     messages: int,
     client_properties: list = [],
     environment: str = None,
-    broker_list: str = "\$KAFKA_BROKER_LIST",
+    broker_list: str = r"\$KAFKA_BROKER_LIST",
 ) -> str:
 
     client_properties_file = write_client_properties(cn, marathon_task, client_properties)
