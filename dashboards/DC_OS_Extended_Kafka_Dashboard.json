@@ -27,12 +27,6 @@
       "id": "prometheus",
       "name": "Prometheus",
       "version": "5.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "singlestat",
-      "name": "Singlestat",
-      "version": "5.0.0"
     }
   ],
   "annotations": {
@@ -52,8 +46,8 @@
   "editable": true,
   "gnetId": 9018,
   "graphTooltip": 0,
-  "id": null,
-  "iteration": 1556267082112,
+  "id": 32,
+  "iteration": 1556614710477,
   "links": [],
   "panels": [
     {
@@ -132,7 +126,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(kafka_server_BrokerTopicMetrics_MessagesInPerSec_[[interval]]inuteRate{service_name=\"$service_name\"})",
+          "expr": "sum(kafka_server_BrokerTopicMetrics_MessagesInPerSec_[[rate]]{service_name=\"$service_name\"})",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -141,7 +135,7 @@
         }
       ],
       "thresholds": "",
-      "title": "Global avg msg/sec ($interval) for ($service_name)",
+      "title": "Global avg msg/sec ($rate) for ($service_name)",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -194,7 +188,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(kafka_server_BrokerTopicMetrics_MessagesInPerSec_[[interval]]inuteRate{service_name=\"$service_name\"})by(topic)",
+          "expr": "sum(kafka_server_BrokerTopicMetrics_MessagesInPerSec_[[rate]]{service_name=\"$service_name\"})by(topic)",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -205,7 +199,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Kafka avg msg/sec ($interval) by Topic for ($service_name)",
+      "title": "Kafka avg msg/sec ($rate) by Topic for ($service_name)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -282,7 +276,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(kafka_server_BrokerTopicMetrics_MessagesInPerSec_all_count{service_name=\"$service_name\"})",
+          "expr": "(kafka_server_BrokerTopicMetrics_MessagesInPerSec_all_count{service_name=\"$service_name\", task_name=~\"$task_name\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{task_name}}",
@@ -292,7 +286,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Messages in per sec all count",
+      "title": "Messages in per sec for ($task_name) count",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -439,7 +433,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(kafka_controller_KafkaController_ActiveControllerCount{service_name=\"$service_name\"})by(task_name, service_name)",
+          "expr": "sum(kafka_controller_KafkaController_ActiveControllerCount{service_name=\"$service_name\",task_name=~\"$task_name\"})by(task_name, service_name)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{task_name}}",
@@ -457,7 +451,7 @@
       ],
       "timeFrom": null,
       "timeShift": null,
-      "title": "ActiveControllerCount for ($service_name)",
+      "title": "ActiveControllerCount for ($service_name) broker ($task_name)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -568,10 +562,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "max(kafka_cluster_Partition_UnderReplicated{service_name=\"$service_name\"})by(topic, service_name)",
+          "expr": "max(kafka_cluster_Partition_UnderReplicated{service_name=\"$service_name\",task_name=~\"$task_name\"})by(topic, task_name)",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "{{topic}}",
+          "legendFormat": "{{task_name}} / {{topic}}",
           "refId": "A"
         }
       ],
@@ -586,7 +580,7 @@
       ],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Under Replicated Partitions for ($service_name)",
+      "title": "Under Replicated Partitions for ($service_name) broker ($task_name)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -664,7 +658,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(kafka_controller_KafkaController_OfflinePartitionsCount{service_name=\"$service_name\"})by(task_name)",
+          "expr": "sum(kafka_controller_KafkaController_OfflinePartitionsCount{service_name=\"$service_name\",task_name=~\"$task_name\"})by(task_name)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{task_name}}",
@@ -674,7 +668,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Offline Partitions for ($service_name)",
+      "title": "Offline Partitions for ($service_name) broker ($task_name)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -752,7 +746,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(kafka_controller_KafkaController_GlobalPartitionCount{service_name=\"$service_name\"})",
+          "expr": "(kafka_controller_KafkaController_GlobalPartitionCount{service_name=\"$service_name\",task_name=~\"$task_name\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{task_name}}",
@@ -762,7 +756,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Total Partition Count (Broker) for ($service_name)",
+      "title": "Total Partition Count (Broker) for ($service_name) broker ($task_name)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -840,7 +834,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(kafka_server_ReplicaManager_IsrExpandsPerSec_5MinuteRate{service_name=\"$service_name\"}\n)",
+          "expr": "(kafka_server_ReplicaManager_IsrExpandsPerSec_5MinuteRate{service_name=\"$service_name\",task_name=~\"$task_name\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{task_name}}",
@@ -850,7 +844,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "ISR Expansion Rate (Broker) for ($service_name)",
+      "title": "ISR Expansion Rate (Broker) for ($service_name) broker ($task_name)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -928,7 +922,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(kafka_server_ReplicaManager_IsrShrinksPerSec_5MinuteRate{service_name=\"$service_name\"})",
+          "expr": "(kafka_server_ReplicaManager_IsrShrinksPerSec_5MinuteRate{service_name=\"$service_name\",task_name=~\"$task_name\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{task_name}}",
@@ -938,7 +932,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "ISR Shrink Rate (Broker) for ($service_name)",
+      "title": "ISR Shrink Rate (Broker) for ($service_name) broker ($task_name)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1016,17 +1010,17 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(kafka_server_DelayedOperationPurgatory_NumDelayedOperations{service_name=\"$service_name\"})by(service_name)",
+          "expr": "sum(kafka_server_DelayedOperationPurgatory_NumDelayedOperations{service_name=\"$service_name\",task_name=~\"$task_name\"})by(task_name)",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "{{service_name}}",
+          "legendFormat": "{{task_name}}",
           "refId": "A"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Producer Purgatory Requests Waiting for ($service_name)",
+      "title": "Producer Purgatory Requests Waiting for ($service_name) broker ($task_name)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1104,17 +1098,17 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(kafka_server_DelayedOperationPurgatory_PurgatorySize{service_name=\"$service_name\"})by(service_name)",
+          "expr": "sum(kafka_server_DelayedOperationPurgatory_PurgatorySize{service_name=\"$service_name\",task_name=~\"$task_name\"})by(task_name)",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "{{service_name}}",
+          "legendFormat": "{{task_name}}",
           "refId": "A"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Delayed Fetch Operation Purgatory Size for ($service_name)",
+      "title": "Delayed Fetch Operation Purgatory Size for ($service_name) broker ($task_name)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1191,7 +1185,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(kafka_server_ReplicaManager_PartitionCount{service_name=\"$service_name\"})",
+          "expr": "(kafka_server_ReplicaManager_PartitionCount{service_name=\"$service_name\",task_name=~\"$task_name\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{task_name}}",
@@ -1201,7 +1195,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Partition Count Across Brokers for ($service_name)",
+      "title": "Partition Count Across Brokers for ($service_name) broker ($task_name)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1279,7 +1273,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(kafka_server_KafkaServer_BrokerState{service_name=\"$service_name\"})",
+          "expr": "(kafka_server_KafkaServer_BrokerState{service_name=\"$service_name\",task_name=~\"$task_name\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{task_name}}",
@@ -1289,7 +1283,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Broker State for ($service_name)",
+      "title": "Broker State for ($service_name) broker ($task_name)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1368,7 +1362,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(kafka_server_BrokerTopicMetrics_MessagesInPerSec_[[interval]]inuteRate{service_name=\"$service_name\"})",
+          "expr": "(kafka_server_BrokerTopicMetrics_MessagesInPerSec_[[rate]]{service_name=\"$service_name\",task_name=~\"$task_name\"})",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -1379,7 +1373,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Kafka avg msg/sec ($interval) per (Broker / Topic) for ($service_name)",
+      "title": "Avg msg/sec ($rate) per (Broker / Topic) for ($service_name) broker ($task_name)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1457,7 +1451,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(kafka_server_BrokerTopicMetrics_BytesInPerSec_all_[[interval]]inuteRate{service_name=\"$service_name\"})",
+          "expr": "(kafka_server_BrokerTopicMetrics_BytesInPerSec_all_[[rate]]{service_name=\"$service_name\",task_name=~\"$task_name\"})",
           "format": "time_series",
           "interval": "15s",
           "intervalFactor": 1,
@@ -1468,7 +1462,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "All Bytes In ($interval) per (Broker) for ($service_name)",
+      "title": "All Bytes In ($rate) per (Broker) for ($service_name) broker ($task_name)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1545,7 +1539,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(kafka_server_BrokerTopicMetrics_BytesOutPerSec_all_[[interval]]inuteRate{service_name=\"$service_name\"})",
+          "expr": "(kafka_server_BrokerTopicMetrics_BytesOutPerSec_all_[[rate]]{service_name=\"$service_name\",task_name=~\"$task_name\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{task_name}}",
@@ -1555,7 +1549,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "All Bytes Out ($interval) per (Broker) for ($service_name)",
+      "title": "All Bytes Out ($rate) per (Broker) for ($service_name) broker ($task_name)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1647,7 +1641,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(kafka_server_ReplicaManager_LeaderCount{service_name=\"$service_name\"})",
+          "expr": "(kafka_server_ReplicaManager_LeaderCount{service_name=\"$service_name\",task_name=~\"$task_name\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{task_name}}",
@@ -1657,7 +1651,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Number of Leaders per (Broker) for ($service_name)",
+      "title": "Number of Leaders per (Broker) for ($service_name) broker ($task_name)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1735,17 +1729,17 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "max(kafka_controller_controllerstats_uncleanleaderelectionspersec_[[interval]]minuterate{service_name=\"$service_name\"})by(service_name)",
+          "expr": "max(kafka_controller_ControllerStats_UncleanLeaderElectionsPerSec_[[rate]]{service_name=\"$service_name\",task_name=~\"$task_name\"})by(task_name)",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "{{service_name}}",
+          "legendFormat": "{{task_name}}",
           "refId": "A"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Unclean Leader Elections ($interval) for ($service_name)",
+      "title": "Unclean Leader Elections ($rate) for ($service_name) broker ($task_name)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1823,17 +1817,17 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "max(kafka_controller_ControllerStats_LeaderElectionRateAndTimeMs_max{service_name=\"$service_name\"})by(service_name)",
+          "expr": "max(kafka_controller_ControllerStats_LeaderElectionRateAndTimeMs_max{service_name=\"$service_name\",task_name=~\"$task_name\"})by(task_name)",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "{{service_name}}",
+          "legendFormat": "{{task_name}}",
           "refId": "A"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Max Recorded Leader Election Latency (ms) for ($service_name)",
+      "title": "Max Recorded Leader Election Latency (ms) for ($service_name) broker ($task_name)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1893,7 +1887,7 @@
         "max": true,
         "min": false,
         "rightSide": true,
-        "show": false,
+        "show": true,
         "total": false,
         "values": true
       },
@@ -1911,17 +1905,17 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "max(kafka_server_ReplicaFetcherManager_MaxLag{service_name=\"$service_name\"})by(service_name)",
+          "expr": "max(kafka_server_ReplicaFetcherManager_MaxLag{service_name=\"$service_name\",task_name=~\"$task_name\"})by(task_name)",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "{{service_name}}",
+          "legendFormat": "{{task_name}}",
           "refId": "A"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Max Lag - Follower/Leader Replicas for ($service_name)",
+      "title": "Max Lag - Follower/Leader Replicas for ($service_name) broker ($task_name)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1981,7 +1975,7 @@
         "max": false,
         "min": false,
         "rightSide": true,
-        "show": false,
+        "show": true,
         "total": false,
         "values": true
       },
@@ -1999,17 +1993,17 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg(kafka_network_RequestMetrics_RemoteTimeMs_mean{service_name=\"$service_name\"})",
+          "expr": "avg(kafka_network_RequestMetrics_RemoteTimeMs_mean{service_name=\"$service_name\",task_name=~\"$task_name\"})by(task_name)",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "",
+          "legendFormat": "{{task_name}}",
           "refId": "A"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Avg Time Request Waits for Follower (ms) for ($service_name)",
+      "title": "Avg Time Request Waits for Follower (ms) for ($service_name) broker ($task_name)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -2099,7 +2093,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(kafka_network_RequestChannel_RequestQueueSize{service_name=\"$service_name\"})",
+          "expr": "(kafka_network_RequestChannel_RequestQueueSize{service_name=\"$service_name\",task_name=~\"$task_name\"})",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -2110,7 +2104,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Current Request Queue Size (Broker) for ($service_name)",
+      "title": "Current Request Queue Size (Broker) for ($service_name) broker ($task_name)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -2188,18 +2182,18 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg(kafka_network_RequestMetrics_TotalTimeMs_mean{service_name=\"$service_name\"})by(service_name)",
+          "expr": "avg(kafka_network_RequestMetrics_TotalTimeMs_mean{service_name=\"$service_name\",task_name=~\"$task_name\"})by(task_name)",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "{{service_name}}",
+          "legendFormat": "{{task_name}}",
           "refId": "A"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Avg Total Time Request Serve (ms) for ($service_name)",
+      "title": "Avg Total Time Request Serve (ms) for ($service_name) broker ($task_name)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -2277,18 +2271,18 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg(kafka_network_RequestMetrics_ResponseSendTimeMs_mean{service_name=\"$service_name\"})by(service_name)",
+          "expr": "avg(kafka_network_RequestMetrics_ResponseSendTimeMs_mean{service_name=\"$service_name\",task_name=~\"$task_name\"})by(task_name)",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "{{service_name}}",
+          "legendFormat": "{{task_name}}",
           "refId": "A"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Avg Request Response Time (ms) for ($service_name)",
+      "title": "Avg Request Response Time (ms) for ($service_name) broker ($task_name)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -2366,18 +2360,18 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg(kafka_network_RequestMetrics_RequestQueueTimeMs_mean{service_name=\"$service_name\"})by(service_name)",
+          "expr": "avg(kafka_network_RequestMetrics_RequestQueueTimeMs_mean{service_name=\"$service_name\",task_name=~\"$task_name\"})by(task_name)",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "{{service_name}}",
+          "legendFormat": "{{task_name}}",
           "refId": "A"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Avg Request Waiting Time in Request Queue (ms) for ($service_name)",
+      "title": "Avg Request Waiting Time in Request Queue (ms) for ($service_name) broker ($task_name)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -2455,18 +2449,18 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg(kafka_network_RequestMetrics_ResponseQueueTimeMs_mean{service_name=\"$service_name\"})by(service_name)",
+          "expr": "avg(kafka_network_RequestMetrics_ResponseQueueTimeMs_mean{service_name=\"$service_name\",task_name=~\"$task_name\"})by(task_name)",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "{{service_name}}",
+          "legendFormat": "{{task_name}}",
           "refId": "A"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Avg Request Waiting Time in Response Queue (ms) for ($service_name)",
+      "title": "Avg Request Waiting Time in Response Queue (ms) for ($service_name) broker ($task_name)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -2544,18 +2538,18 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg(kafka_network_RequestMetrics_LocalTimeMs_mean{service_name=\"$service_name\"})by(service_name)",
+          "expr": "avg(kafka_network_RequestMetrics_LocalTimeMs_mean{service_name=\"$service_name\",task_name=~\"$task_name\"})by(task_name)",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "{{service_name}}",
+          "legendFormat": "{{task_name}}",
           "refId": "A"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Avg Request Processing Time (ms) at Leader for ($service_name)",
+      "title": "Avg Request Processing Time (ms) at Leader for ($service_name) broker ($task_name)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -2602,7 +2596,7 @@
       "fill": 1,
       "gridPos": {
         "h": 9,
-        "w": 12,
+        "w": 8,
         "x": 0,
         "y": 90
       },
@@ -2632,7 +2626,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(kafka_server_BrokerTopicMetrics_TotalProduceRequestsPerSec_[[interval]]inuteRate{service_name=\"$service_name\"})",
+          "expr": "(kafka_server_BrokerTopicMetrics_TotalProduceRequestsPerSec_[[rate]]{service_name=\"$service_name\",task_name=~\"$task_name\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{task_name}} / {{topic}}",
@@ -2648,7 +2642,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Produce Request Rate / sec ($interval) by (Broker / Topic) for ($service_name)",
+      "title": "Produce Request Rate / sec ($rate) by (Broker / Topic) for ($service_name) broker ($task_name)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -2695,8 +2689,8 @@
       "fill": 1,
       "gridPos": {
         "h": 9,
-        "w": 12,
-        "x": 12,
+        "w": 8,
+        "x": 8,
         "y": 90
       },
       "id": 112,
@@ -2725,7 +2719,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(kafka_server_BrokerTopicMetrics_TotalFetchRequestsPerSec_[[interval]]inuteRate{service_name=\"$service_name\"})",
+          "expr": "(kafka_server_BrokerTopicMetrics_TotalFetchRequestsPerSec_[[rate]]{service_name=\"$service_name\",task_name=~\"$task_name\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{task_name}} / {{topic}}",
@@ -2735,7 +2729,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Fetch Request Rate / sec ($interval) by (Broker / Topic) for ($service_name)",
+      "title": "Fetch Request Rate / sec ($rate) by (Broker / Topic) for ($service_name) broker ($task_name)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -2773,7 +2767,135 @@
       }
     },
     {
-      "collapsed": true,
+      "alert": {
+        "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                0.2
+              ],
+              "type": "lt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "A",
+                "5m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "avg"
+            },
+            "type": "query"
+          }
+        ],
+        "executionErrorState": "alerting",
+        "frequency": "60s",
+        "handler": 1,
+        "name": "Request Handler Avg Idle Percent for alert",
+        "noDataState": "no_data",
+        "notifications": []
+      },
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_PROMETHEUS}",
+      "description": "Values:\n1 or less = OK\n0.2 or less = potential problem\n0.1 or less = performance problem",
+      "fill": 1,
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 16,
+        "y": 90
+      },
+      "id": 137,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "max": false,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "(kafka_server_KafkaRequestHandlerPool_RequestHandlerAvgIdlePercent_[[rate]]{service_name=\"$service_name\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{task_name}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "lt",
+          "value": 0.2
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Request Handler Avg Idle Percent for ($service_name) interval ($rate)",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -2781,186 +2903,185 @@
         "y": 99
       },
       "id": 46,
-      "panels": [
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "prometheus",
-          "decimals": 5,
-          "fill": 1,
-          "gridPos": {
-            "h": 9,
-            "w": 12,
-            "x": 0,
-            "y": 85
-          },
-          "id": 54,
-          "legend": {
-            "alignAsTable": true,
-            "avg": false,
-            "current": true,
-            "max": false,
-            "min": false,
-            "rightSide": true,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "(kafka_server_FetcherStats_RequestsPerSec_[[interval]]inuteRate{service_name=\"$service_name\"})",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "legendFormat": "{{task_name}}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Network Request Rate / sec ($interval) by (Broker) for ($service_name)",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "prometheus",
-          "fill": 1,
-          "gridPos": {
-            "h": 9,
-            "w": 12,
-            "x": 12,
-            "y": 85
-          },
-          "id": 48,
-          "legend": {
-            "alignAsTable": true,
-            "avg": false,
-            "current": true,
-            "max": false,
-            "min": false,
-            "rightSide": true,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "sum(kafka_network_Processor_IdlePercent{service_name=\"$service_name\"})by(service_name)",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "legendFormat": "{{service_name}}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Network Processor Idle (%) for ($service_name)",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "percent",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        }
-      ],
+      "panels": [],
       "title": "Network Info",
       "type": "row"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_PROMETHEUS}",
+      "decimals": 5,
+      "fill": 1,
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 100
+      },
+      "id": 54,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "max": false,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "(kafka_server_FetcherStats_RequestsPerSec_[[rate]]{service_name=\"$service_name\",task_name=~\"$task_name\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{task_name}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Network Request Rate / sec ($rate) by (Broker) for ($service_name) broker ($task_name)",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_PROMETHEUS}",
+      "fill": 1,
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 100
+      },
+      "id": 48,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "max": false,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(kafka_network_Processor_IdlePercent{service_name=\"$service_name\",task_name=~\"$task_name\"})by(task_name)",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{task_name}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Network Processor Idle (%) for ($service_name) broker ($task_name)",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "percent",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     }
   ],
-  "refresh": "1m",
+  "refresh": false,
   "schemaVersion": 16,
   "style": "dark",
   "tags": [],
@@ -2969,11 +3090,10 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
           "text": "kafka",
           "value": "kafka"
         },
-        "datasource": "prometheus",
+        "datasource": "${DS_PROMETHEUS}",
         "hide": 0,
         "includeAll": false,
         "label": "service_name",
@@ -2992,48 +3112,100 @@
         "useTags": false
       },
       {
-        "auto": false,
-        "auto_count": 30,
-        "auto_min": "10s",
+        "allValue": null,
         "current": {
-          "selected": true,
-          "text": "5M",
-          "value": "5M"
+          "tags": [],
+          "text": "5MinuteRate",
+          "value": "5MinuteRate"
         },
         "hide": 0,
-        "label": "interval",
-        "name": "interval",
+        "includeAll": false,
+        "label": "rate",
+        "multi": false,
+        "name": "rate",
         "options": [
           {
             "selected": false,
-            "text": "1M",
-            "value": "1M"
+            "text": "1MinuteRate",
+            "value": "1MinuteRate"
           },
           {
             "selected": true,
-            "text": "5M",
-            "value": "5M"
+            "text": "5MinuteRate",
+            "value": "5MinuteRate"
           },
           {
             "selected": false,
-            "text": "15M",
-            "value": "15M"
+            "text": "15MinuteRate",
+            "value": "15MinuteRate"
           },
           {
             "selected": false,
-            "text": "30M",
-            "value": "30M"
+            "text": "min",
+            "value": "min"
+          },
+          {
+            "selected": false,
+            "text": "max",
+            "value": "max"
+          },
+          {
+            "selected": false,
+            "text": "count",
+            "value": "count"
+          },
+          {
+            "selected": false,
+            "text": "mean",
+            "value": "mean"
+          },
+          {
+            "selected": false,
+            "text": "meanRate",
+            "value": "meanRate"
+          },
+          {
+            "selected": false,
+            "text": "median",
+            "value": "median"
           }
         ],
-        "query": "1M,5M,15M,30M",
-        "refresh": 2,
-        "type": "interval"
+        "query": "1MinuteRate,5MinuteRate,15MinuteRate,min,max,count,mean,meanRate,median",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "allValue": null,
+        "current": {
+          "tags": [],
+          "text": "All",
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": "${DS_PROMETHEUS}",
+        "hide": 0,
+        "includeAll": true,
+        "label": "task_name",
+        "multi": true,
+        "name": "task_name",
+        "options": [],
+        "query": "label_values({executor_name=\"kafka\"},task_name)",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
       }
     ]
   },
   "time": {
-    "from": "2019-04-25T13:29:35.105Z",
-    "to": "2019-04-25T13:30:43.262Z"
+    "from": "now-1h",
+    "to": "now"
   },
   "timepicker": {
     "refresh_intervals": [
@@ -3062,6 +3234,6 @@
   },
   "timezone": "",
   "title": "DC/OS Extended Kafka Dashboard",
-  "uid": "Vbm7Botmk",
-  "version": 25
+  "uid": "otWaoQkZk",
+  "version": 2
 }
