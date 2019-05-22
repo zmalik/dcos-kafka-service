@@ -226,7 +226,7 @@
           "type": "object",
           "properties": {
             "enabled": {
-              "description": "By default JMX is disabled. This option allows to expose secure JMX.",
+              "description": "Enable secure JMX",
               "type": "boolean",
               "enum": [
                 true,
@@ -286,7 +286,7 @@
                       "default": ""
                     },
                     "add_trust_store": {
-                      "description": "By default user specified trust store is disabled. And the user provided certs are added to default trust store.",
+                      "description": "By default user specified trust store is disabled and user provided certs are added to the default trust store.",
                       "type": "boolean",
                       "enum": [
                         true,

@@ -101,7 +101,7 @@ dcos security secrets create -f password_file kafka/passwordfile
 dcos security secrets create -f access_file kafka/access
 ```
 
-Now we are ready to install kafka cluster with secure JMX enabled
+Now we are ready to install a Kafka cluster with secure JMX enabled
 
 ```
 cat <<EOF >> kafka-package-options.json
@@ -127,8 +127,8 @@ EOF
 
 **WARNING**
 
-Due to an upstream bug in Kafka, it doesn't allow SSL connections through RMI port. That is the standard way in most of cli based JMX tools
+Due to an upstream bug, Kafka doesn't allow SSL connections through the RMI port:
 
 https://cwiki.apache.org/confluence/display/KAFKA/KIP-417%3A+Allow+JmxTool+to+connect+to+a+secured+RMI+port
 
-Once this fixed is released in a version RMI connections will be allowed and users won't need to do any extra step in configuration to enable them. 
+Once this is fixed upstream, users will not need to do any additional steps to enable JMX RMI ports.
