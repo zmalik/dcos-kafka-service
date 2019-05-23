@@ -160,11 +160,10 @@ pods:
 
           export JMX_PORT={{SECURE_JMX_PORT}}
           export SECURE_JMX_RMI_PORT={{SECURE_JMX_RMI_PORT}}
-          export KAFKA_JMX_OPTS_SECRET="$KAFKA_JMX_OPTS_SECRET -Dcom.sun.management.config.file=$MESOS_SANDBOX/.ssl/jmx.properties"
-          export KAFKA_JMX_OPTS_SECRET="$KAFKA_JMX_OPTS_SECRET -Djava.rmi.server.hostname=$MESOS_CONTAINER_IP"
+          export KAFKA_JMX_OPTS_SECRET="$KAFKA_JMX_OPTS_SECRET -Djava.rmi.server.hostname=$MESOS_CONTAINER_IP -Dcom.sun.management.config.file=$MESOS_SANDBOX/.ssl/jmx.properties"
 
           if [ ! -f "$MESOS_SANDBOX/jmx/key_file" ] ; then
-              echo "Secure JMX is enabled but no JMX pwd file was provided. Exiting."
+              echo "Secure JMX is enabled but no JMX password file was provided. Exiting."
               exit 1
           fi
           if [ ! -f "$MESOS_SANDBOX/jmx/access_file" ] ; then

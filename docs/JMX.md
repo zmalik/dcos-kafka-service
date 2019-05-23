@@ -3,7 +3,7 @@
 
 Enabling secure JMX for Kafka package
 
-To enable the secure JMX we need to add the next options in the configuration of the package: 
+To enable the secure JMX we need to add the following options in the configuration of the package: 
 
 ```
 "service": {
@@ -23,25 +23,25 @@ To enable the secure JMX we need to add the next options in the configuration of
 }
 ```
 
-**jmx.enabled** enables the secure JMX 
+**jmx.enabled:** enables the secure JMX 
 
-**jmx.port** JMX port
+**jmx.port:** JMX port
 
-**jmx.rmi_port** JMX RMI port
+**jmx.rmi_port:** JMX RMI port
 
-**jmx.access_file** The access file for the JMX. This has to be name of the secret, which has been created from  the access file.
+**jmx.access_file:** The path to the secret in the Secret Store that has the contents of the access file..
 
-**jmx.password_file** The password file for the JMX.  This has to be name of the secret, which has been created from the password file.
+**jmx.password_file:** The path to the secret in the Secret Store that has the contents of the password file.
 
-**jmx.key_store** The keystore to be used for JMX. This has to be name of the secret, which has been created from the key store.
+**jmx.key_store:** The path to the secret in the Secret Store that has the contents of the key store.
 
-**jmx.key_store_password_file** The password file for the JMX.  This has to be name of the secret, which has been created from the key store password file.
+**jmx.key_store_password_file:** The path to the secret in the Secret Store that has the contents of the key store password file.
 
-**add_trust_store** enables the user provided trust store. 
+**jmx.add_trust_store:** enables the user provided trust store. 
 
-**trust_store ** The truststore to be used for JMX. This has to be name of the secret, which has been created from the trust store.
+**jmx.trust_store:** The path to the secret in the Secret Store that has the contents of the trust store.
 
-**trust_store_password_file** The password file for the JMX.  This has to be name of the secret, which has been created from the trust store password file.
+**jmx.trust_store_password_file:** The path to the secret in the Secret Store that has the contents of the trust store password file.
 
 ### Example with self-signed certificate
 
