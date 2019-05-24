@@ -39,7 +39,7 @@ def install_jmx_configured_kafka(self_signed_trust_store: bool = True):
                                  "trust_store_password_file": TRUST_STORE_PASS}}},
             service_options)
     if sdk_utils.is_strict_mode():
-        kafka_sa = "test/integration/kafka/service-account"
+        kafka_sa = "kafka-service-account"
         kafka_sa_secret = "test/integration/kafka/secret"
 
         sdk_security.setup_security(
