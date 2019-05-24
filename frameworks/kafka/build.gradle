@@ -13,9 +13,6 @@ repositories {
     maven {
         url "http://downloads.mesosphere.com/maven-snapshot/"
     }
-    maven {
-        url 'http://repository.apache.org/content/repositories/snapshots/'
-    }
 }
 
 ext {
