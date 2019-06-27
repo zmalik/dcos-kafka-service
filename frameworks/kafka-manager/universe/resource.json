@@ -10,7 +10,7 @@
   "assets": {
     "container": {
       "docker": {
-        "kafka-manager-docker": "deric/kafka-manager:1.3.3.18"
+        "kafka-manager-docker": "zmalikshxil/kafka-manager:2.0.0.2"
       }
     }
   }
