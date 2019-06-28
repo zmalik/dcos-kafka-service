@@ -1,58 +1,94 @@
 {
-  "id": "{{service.name}}",
-  "cpus": {{service.cpus}},
-  "mem": {{service.mem}},
-  "instances": {{service.instances}},
-  "container": {
-    "type": "DOCKER",
-    "docker": {
-      "image": "{{resource.assets.container.docker.kafka-manager-docker}}",
-      "forcePullImage": true,
-      "network": "BRIDGE",
-      "portMappings": [
-        {
-          "containerPort": 9000,
-          "hostPort": 0,
-          {{#marathon-lb.enable}}
-          "servicePort": {{marathon-lb.external_access_port}},
-          {{/marathon-lb.enable}}
-          "protocol": "tcp"
+    "id": "{{service.name}}",
+    "cpus": {{service.cpus}},
+    "mem": {{service.mem}},
+    "instances": {{service.instances}},
+    "container": {
+        {{#kafka-manager.jmx.enabled}}
+        "volumes": [
+            {
+                "containerPath": "jmx/keystore",
+                "secret": "kafka_key_store"
+            },
+            {
+                "containerPath": "jmx/keystorepasswordfile",
+                "secret": "kafka_key_store_password_file"
+            },
+            {
+                "containerPath": "jmx/truststore",
+                "secret": "kafka_trust_store"
+            },
+            {
+                "containerPath": "jmx/truststorepasswordfile",
+                "secret": "kafka_trust_store_password_file"
+            }
+        ],
+        {{/kafka-manager.jmx.enabled}}
+        "type": "MESOS",
+        "docker": {
+              "image": "{{resource.assets.container.docker.kafka-manager-docker}}",
+              "forcePullImage": true
         }
-      ]
+    },
+    "networks": [
+        {
+            "mode": "host"
+        }
+    ],
+    "portDefinitions": [
+        {
+            "name": "kafka-manager",
+            "port": 9000,
+            "protocol": "tcp",
+            "labels": {
+            "VIP_0": "{{service.name}}:9000"
+            }
+        }
+    ],
+    "requirePorts": true,
+    {{#kafka-manager.jmx.enabled}}
+    "secrets": {
+        "kafka_key_store": {
+          "source": "{{kafka-manager.jmx.key_store}}"
+        },
+        "kafka_key_store_password_file": {
+          "source": "{{kafka-manager.jmx.key_store_password_file}}"
+        },
+        "kafka_trust_store": {
+          "source": "{{kafka-manager.jmx.trust_store}}"
+        },
+        "kafka_trust_store_password_file": {
+          "source": "{{kafka-manager.jmx.trust_store_password_file}}"
+        }
+    },
+    {{/kafka-manager.jmx.enabled}}
+    "env": {
+        "ZK_HOSTS": "{{kafka-manager.zk}}",
+        {{^kafka-manager.zk-base-path}}
+        "BASE_ZK_PATH": "/{{service.name}}",
+        {{/kafka-manager.zk-base-path}}
+        {{#kafka-manager.zk-base-path}}
+        "BASE_ZK_PATH": "{{kafka-manager.zk-base-path}}",
+        {{/kafka-manager.zk-base-path}}
+        "KAFKA_MANAGER_ARGS": "{{kafka-manager.zk-args}}",
+        {{#kafka-manager.jmx.enabled}}
+        "TRUST_STORE_PATH" : "jmx/truststore",
+        "KEY_STORE_PATH" : "jmx/keystore",
+        "TRUST_STORE_PASSWORD" : "jmx/truststorepasswordfile",
+        "KEY_STORE_PASSWORD" : "jmx/keystorepasswordfile",
+        {{/kafka-manager.jmx.enabled}}
+        "APPLICATION_SECRET": "{{kafka-manager.application_secret}}",
+        "KAFKA_MANAGER_CONFIG": "{{kafka-manager.config}}",
+        "HTTP_CONTEXT": "/",
+        "KAFKA_MANAGER_LOGLEVEL": "{{kafka-manager.loglevel}}"
+    },
+    "acceptedResourceRoles": [
+        "*"
+    ],
+    "labels": {
+        "DCOS_SERVICE_NAME": "{{service.name}}",
+        "DCOS_SERVICE_SCHEME": "http",
+        "DCOS_SERVICE_PORT_INDEX": "0",
+        "DCOS_PACKAGE_VERSION": "{{kafka-manager-version}}"
     }
-  },
-  "healthChecks": [
-    {
-      "gracePeriodSeconds": 120,
-      "intervalSeconds": 30,
-      "maxConsecutiveFailures": 0,
-      "path": "/api/health",
-      "portIndex": 0,
-      "protocol": "MESOS_HTTP",
-      "timeoutSeconds": 5
-    }
-  ],
-  "env": {
-    "ZK_HOSTS": "{{kafka-manager.zk}}",
-    {{^kafka-manager.zk-base-path}}
-    "BASE_ZK_PATH": "/{{service.name}}",
-    {{/kafka-manager.zk-base-path}}
-    {{#kafka-manager.zk-base-path}}
-    "BASE_ZK_PATH": "{{kafka-manager.zk-base-path}}",
-    {{/kafka-manager.zk-base-path}}
-    "KAFKA_MANAGER_ARGS": "{{kafka-manager.zk-args}}",
-    "APPLICATION_SECRET": "{{kafka-manager.application_secret}}",
-    "KAFKA_MANAGER_CONFIG": "{{kafka-manager.config}}",
-    "HTTP_CONTEXT": "/",
-    "KAFKA_MANAGER_LOGLEVEL": "{{kafka-manager.loglevel}}"
-  },
-  "labels": {
-    "DCOS_SERVICE_NAME": "{{service.name}}",
-    "DCOS_SERVICE_SCHEME": "http",
-    {{#marathon-lb.enable}}
-    "HAPROXY_GROUP": "{{marathon-lb.group}}",
-    "HAPROXY_0_VHOST": "{{marathon-lb.virtual_host}}",
-    {{/marathon-lb.enable}}
-    "DCOS_PACKAGE_VERSION": "{{package.version}}"
-  }
 }

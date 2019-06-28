@@ -1,0 +1,28 @@
+{
+  "apiVersion": "V2",
+  "name": "kafka-manager-pool",
+  "count": 1,
+  "haproxy": {
+    "frontends": [{
+      "bindPort": 8080,
+      "protocol": "HTTP",
+      "linkBackend": {
+        "defaultBackend": "kafka-manager-backend"
+      }
+    }],
+    "backends": [{
+      "name": "kafka-manager-backend",
+      "protocol": "HTTP",
+      "services": [{
+        "marathon": {
+          "serviceID": "kafka-manager"
+        },
+        "endpoint": {
+          "type": "ADDRESS",
+          "address": "kafka-manager.marathon.l4lb.thisdcos.directory",
+          "port": 9000
+        }
+      }]
+    }]
+  }
+}

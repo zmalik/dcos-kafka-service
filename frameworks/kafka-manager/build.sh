@@ -1,24 +1,39 @@
 #!/usr/bin/env bash
+# This is a separate build script for Confluent Control Center. It creates a stub Universe for the Confluent Control Center package and optionally
+# publishes it to S3 or a local artifact server.
 set -e
 
 FRAMEWORK_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-REPO_ROOT_DIR=$(dirname $(dirname $FRAMEWORK_DIR))
-
-# grab TEMPLATE_x vars for use in universe template:
 source $FRAMEWORK_DIR/versions.sh
+ROOT_DIR="$(dirname "$(dirname ${FRAMEWORK_DIR})")"
+export TOOLS_DIR=${ROOT_DIR}/tools
 
-# Build/test scheduler.zip/CLIs/setup-helper.zip
-${REPO_ROOT_DIR}/gradlew -p ${FRAMEWORK_DIR} check distZip
-$FRAMEWORK_DIR/cli/build.sh
-$FRAMEWORK_DIR/setup-helper/build.sh
+PUBLISH_STEP=${1-none}
+PACKAGE_VERSION=${2-"stub-universe"}
+UNIVERSE_DIR=${UNIVERSE_DIR:=${FRAMEWORK_DIR}/universe}
+case "$PUBLISH_STEP" in
+    local)
+        echo "Launching HTTP artifact server"
+        PUBLISH_SCRIPT=${TOOLS_DIR}/publish_http.py
+        ;;
+    aws)
+        echo "Uploading to S3"
+        PUBLISH_SCRIPT=${TOOLS_DIR}/publish_aws.py
+        ;;
+    .dcos)
+        echo "Uploading .dcos files to S3"
+        PUBLISH_SCRIPT=${TOOLS_DIR}/publish_dcos_file.py
+        ;;
+    *)
+        echo "---"
+        echo "Nothing to build as it's a Marathon app, so skipping publish step."
+        echo "Use one of the following additional arguments to get something that runs on a cluster:"
+        echo "- 'local': Host the build in a local HTTP server for use by a DC/OS Vagrant cluster."
+        echo "- 'aws': Upload the build to S3."
+        ;;
+esac
 
-# Build package with our scheduler.zip/CLIs/setup-helper.zip and the SDK artifacts we built:
-$REPO_ROOT_DIR/tools/build_package.sh \
-    kafka \
-    $FRAMEWORK_DIR \
-    -a "$FRAMEWORK_DIR/build/distributions/$(basename $FRAMEWORK_DIR)-scheduler.zip" \
-    -a "$FRAMEWORK_DIR/cli/dcos-service-cli-linux" \
-    -a "$FRAMEWORK_DIR/cli/dcos-service-cli-darwin" \
-    -a "$FRAMEWORK_DIR/cli/dcos-service-cli.exe" \
-    -a "$FRAMEWORK_DIR/setup-helper/setup-helper.zip" \
-    $@
+if [ -n "$PUBLISH_SCRIPT" ]; then
+    TEMPLATE_DOCUMENTATION_PATH="https://docs.mesosphere.com/services/kafka-manager/" \
+        $PUBLISH_SCRIPT kafka-manager "${PACKAGE_VERSION}" ${UNIVERSE_DIR}
+fi

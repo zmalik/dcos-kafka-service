@@ -65,6 +65,79 @@
           "description": "Java log level",
           "type": "string",
           "default": "INFO"
+        },
+        "jmx": {
+          "title": "Secure JMX configuration",
+          "description": "Configure the secure JMX settings to connect to secure JMX of Kafka",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "description": "Use secure JMX settings.",
+              "type": "boolean",
+              "enum": [
+                true,
+                false
+              ],
+              "default": false
+            }
+          },
+          "dependencies": {
+            "enabled": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "enabled": {
+                      "enum": [
+                        false
+                      ]
+                    }
+                  }
+                },
+                {
+                  "properties": {
+                    "enabled": {
+                      "enum": [
+                        true
+                      ]
+                    },
+                    "key_store": {
+                      "description": "Secret name that contains key store file.",
+                      "type": "string",
+                      "title": "key store",
+                      "default": "",
+                      "media": {
+                        "type": "application/x-secret+string"
+                      }
+                    },
+                    "key_store_password_file": {
+                      "description": "Secret name that contains key store password file.",
+                      "type": "string",
+                      "default": "",
+                      "media": {
+                        "type": "application/x-secret+string"
+                      }
+                    },
+                    "trust_store": {
+                      "description": "Secret name that contains trust store file.",
+                      "type": "string",
+                      "default": "",
+                      "media": {
+                        "type": "application/x-secret+string"
+                      }
+                    },
+                    "trust_store_password_file": {
+                      "description": "Secret name that contains trust store password file.",
+                      "type": "string",
+                      "default": "",
+                      "media": {
+                        "type": "application/x-secret+string"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
         }
       },
       "required": [
